@@ -8,9 +8,9 @@ namespace UnitRegistry
     public sealed class Unit : IEquatable<Unit>
     {
         /// <summary>
-        /// Gets the stable identity key for this unit.
+        /// Gets the stable identity of this unit.
         /// </summary>
-        public string Key { get; }
+        public UnitId Id { get; }
 
         /// <summary>
         /// Gets the dimension this unit belongs to.
@@ -26,17 +26,17 @@ namespace UnitRegistry
         /// <summary>
         /// Initializes a new instance of the <see cref="Unit"/> class.
         /// </summary>
-        /// <param name="key">Stable identity key for the unit.</param>
+        /// <param name="id">Stable identity for the unit.</param>
         /// <param name="dimension">The dimension this unit belongs to.</param>
         /// <param name="conversionFactor">
         /// Multiplier that converts a value in this unit to the canonical base unit.
         /// Must be a finite positive number.
         /// </param>
-        public Unit(string key, Dimension dimension, double conversionFactor)
+        public Unit(UnitId id, Dimension dimension, double conversionFactor)
         {
-            if (string.IsNullOrWhiteSpace(key))
+            if (id == null)
             {
-                throw new ArgumentException("Unit key must not be null, empty, or whitespace.", nameof(key));
+                throw new ArgumentNullException(nameof(id));
             }
 
             if (dimension == null)
@@ -49,9 +49,23 @@ namespace UnitRegistry
                 throw new ArgumentOutOfRangeException(nameof(conversionFactor), "Conversion factor must be a finite positive number.");
             }
 
-            Key = key;
+            Id = id;
             Dimension = dimension;
             ConversionFactor = conversionFactor;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Unit"/> class.
+        /// </summary>
+        /// <param name="id">Stable identity value for the unit.</param>
+        /// <param name="dimension">The dimension this unit belongs to.</param>
+        /// <param name="conversionFactor">
+        /// Multiplier that converts a value in this unit to the canonical base unit.
+        /// Must be a finite positive number.
+        /// </param>
+        public Unit(string id, Dimension dimension, double conversionFactor)
+            : this(new UnitId(id), dimension, conversionFactor)
+        {
         }
 
         /// <summary>
@@ -82,7 +96,7 @@ namespace UnitRegistry
                 return true;
             }
 
-            return string.Equals(Key, other.Key, StringComparison.Ordinal);
+            return Id == other.Id;
         }
 
         public override bool Equals(object obj)
@@ -92,12 +106,12 @@ namespace UnitRegistry
 
         public override int GetHashCode()
         {
-            return StringComparer.Ordinal.GetHashCode(Key);
+            return Id.GetHashCode();
         }
 
         public override string ToString()
         {
-            return Key;
+            return Id.ToString();
         }
 
         public static bool operator ==(Unit left, Unit right)

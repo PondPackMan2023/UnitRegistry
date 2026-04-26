@@ -1,8 +1,19 @@
 <Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
   <Folder Name="/Tests/">
-    <Project Path="tests/UnitRegistry.Core.Tests/UnitRegistry.Core.Tests.csproj" />
-    <Project Path="tests/UnitRegistry.Formatting.Tests/UnitRegistry.Formatting.Tests.csproj" />
+    <Project Path="tests/UnitRegistry.Core.Tests/UnitRegistry.Core.Tests.csproj">
+      <Platform Project="x64" />
+    </Project>
+    <Project Path="tests/UnitRegistry.Formatting.Tests/UnitRegistry.Formatting.Tests.csproj">
+      <Platform Project="x64" />
+    </Project>
   </Folder>
-  <Project Path="src/UnitRegistry.Core/UnitRegistry.Core.csproj" />
-  <Project Path="src/UnitRegistry.Formatting/UnitRegistry.Formatting.csproj" />
+  <Project Path="src/UnitRegistry.Core/UnitRegistry.Core.csproj">
+    <Platform Project="x64" />
+  </Project>
+  <Project Path="src/UnitRegistry.Formatting/UnitRegistry.Formatting.csproj">
+    <Platform Project="x64" />
+  </Project>
 </Solution>

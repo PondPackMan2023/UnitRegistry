@@ -1,5 +1,7 @@
 # UnitRegistry
 
+2026-April
+
 UnitRegistry is a lightweight, domain-agnostic library for managing physical units, dimensions, and unit conversion semantics in engineering software.
 
 It provides a small, explicit foundation for working with physical quantities—such as length, time, pressure, and flow—without imposing application-specific assumptions, UI concerns, or numeric formatting policy.

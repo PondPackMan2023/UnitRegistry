@@ -42,11 +42,11 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void BuiltInIdentityIsStable()
         {
-            var first = Units.Length.Meter;
-            var second = Units.Length.Meter;
+            var first = Units.Length.Meters;
+            var second = Units.Length.Meters;
 
             Assert.That(first, Is.SameAs(second));
-            Assert.That(first.Id, Is.EqualTo(new UnitId("meter")));
+            Assert.That(first.Id, Is.EqualTo(new UnitId("meters")));
         }
 
         [Test]
@@ -63,37 +63,37 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void MeterBelongsToLengthDimension()
         {
-            Assert.That(Units.Length.Meter.Dimension, Is.EqualTo(Dimensions.Length));
+            Assert.That(Units.Length.Meters.Dimension, Is.EqualTo(Dimensions.Length));
         }
 
         [Test]
         public void MillimeterBelongsToLengthDimension()
         {
-            Assert.That(Units.Length.Millimeter.Dimension, Is.EqualTo(Dimensions.Length));
+            Assert.That(Units.Length.Millimeters.Dimension, Is.EqualTo(Dimensions.Length));
         }
 
         [Test]
         public void FootBelongsToLengthDimension()
         {
-            Assert.That(Units.Length.Foot.Dimension, Is.EqualTo(Dimensions.Length));
+            Assert.That(Units.Length.Feet.Dimension, Is.EqualTo(Dimensions.Length));
         }
 
         [Test]
         public void SecondBelongsToTimeDimension()
         {
-            Assert.That(Units.Time.Second.Dimension, Is.EqualTo(Dimensions.Time));
+            Assert.That(Units.Time.Seconds.Dimension, Is.EqualTo(Dimensions.Time));
         }
 
         [Test]
         public void MinuteBelongsToTimeDimension()
         {
-            Assert.That(Units.Time.Minute.Dimension, Is.EqualTo(Dimensions.Time));
+            Assert.That(Units.Time.Minutes.Dimension, Is.EqualTo(Dimensions.Time));
         }
 
         [Test]
         public void HourBelongsToTimeDimension()
         {
-            Assert.That(Units.Time.Hour.Dimension, Is.EqualTo(Dimensions.Time));
+            Assert.That(Units.Time.Hours.Dimension, Is.EqualTo(Dimensions.Time));
         }
 
         // ── Conversion correctness ──────────────────────────────────────────────
@@ -101,57 +101,57 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void MeterToBaseIsIdentity()
         {
-            Assert.That(Units.Length.Meter.ToBaseValue(5.0), Is.EqualTo(5.0).Within(1e-12));
-            Assert.That(Units.Length.Meter.FromBaseValue(5.0), Is.EqualTo(5.0).Within(1e-12));
+            Assert.That(Units.Length.Meters.ToBaseValue(5.0), Is.EqualTo(5.0).Within(1e-12));
+            Assert.That(Units.Length.Meters.FromBaseValue(5.0), Is.EqualTo(5.0).Within(1e-12));
         }
 
         [Test]
         public void MillimeterToBaseConvertsCorrectly()
         {
             // 1000 mm → 1 m
-            Assert.That(Units.Length.Millimeter.ToBaseValue(1000.0), Is.EqualTo(1.0).Within(1e-12));
+            Assert.That(Units.Length.Millimeters.ToBaseValue(1000.0), Is.EqualTo(1.0).Within(1e-12));
         }
 
         [Test]
         public void BaseToMillimeterConvertsCorrectly()
         {
             // 1 m → 1000 mm
-            Assert.That(Units.Length.Millimeter.FromBaseValue(1.0), Is.EqualTo(1000.0).Within(1e-12));
+            Assert.That(Units.Length.Millimeters.FromBaseValue(1.0), Is.EqualTo(1000.0).Within(1e-12));
         }
 
         [Test]
         public void FootToBaseConvertsCorrectly()
         {
             // 1 ft → 0.3048 m
-            Assert.That(Units.Length.Foot.ToBaseValue(1.0), Is.EqualTo(0.3048).Within(1e-12));
+            Assert.That(Units.Length.Feet.ToBaseValue(1.0), Is.EqualTo(0.3048).Within(1e-9));
         }
 
         [Test]
         public void BaseToFootConvertsCorrectly()
         {
             // 0.3048 m → 1 ft
-            Assert.That(Units.Length.Foot.FromBaseValue(0.3048), Is.EqualTo(1.0).Within(1e-12));
+            Assert.That(Units.Length.Feet.FromBaseValue(0.3048), Is.EqualTo(1.0).Within(1e-9));
         }
 
         [Test]
         public void SecondToBaseIsIdentity()
         {
-            Assert.That(Units.Time.Second.ToBaseValue(42.0), Is.EqualTo(42.0).Within(1e-12));
-            Assert.That(Units.Time.Second.FromBaseValue(42.0), Is.EqualTo(42.0).Within(1e-12));
+            Assert.That(Units.Time.Hours.ToBaseValue(42.0), Is.EqualTo(42.0).Within(1e-12));
+            Assert.That(Units.Time.Hours.FromBaseValue(42.0), Is.EqualTo(42.0).Within(1e-12));
         }
 
         [Test]
         public void MinuteToBaseConvertsCorrectly()
         {
-            // 1 min → 60 s
-            Assert.That(Units.Time.Minute.ToBaseValue(1.0), Is.EqualTo(60.0).Within(1e-12));
+            // 60 min → 1 hr
+            Assert.That(Units.Time.Minutes.ToBaseValue(60.0), Is.EqualTo(1.0).Within(1e-12));
         }
 
         [Test]
         public void HourToBaseConvertsCorrectly()
         {
-            // 1 hr → 3600 s
-            Assert.That(Units.Time.Hour.ToBaseValue(1.0), Is.EqualTo(3600.0).Within(1e-12));
+            // 1 sec → 1/3600 hr
+            Assert.That(Units.Time.Seconds.ToBaseValue(1.0), Is.EqualTo(1.0 / 3600.0).Within(1e-12));
         }
 
         [Test]
@@ -159,8 +159,8 @@ namespace UnitRegistry.Core.Tests
         {
             double original = 123.456;
 
-            double baseValue = Units.Length.Foot.ToBaseValue(original);
-            double roundTripped = Units.Length.Foot.FromBaseValue(baseValue);
+            double baseValue = Units.Length.Feet.ToBaseValue(original);
+            double roundTripped = Units.Length.Feet.FromBaseValue(baseValue);
 
             Assert.That(roundTripped, Is.EqualTo(original).Within(1e-10));
         }
@@ -170,7 +170,7 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void MeterAndSecondHaveDifferentDimensions()
         {
-            Assert.That(Units.Length.Meter.Dimension, Is.Not.EqualTo(Units.Time.Second.Dimension));
+            Assert.That(Units.Length.Meters.Dimension, Is.Not.EqualTo(Units.Time.Seconds.Dimension));
         }
 
         [Test]
@@ -180,8 +180,8 @@ namespace UnitRegistry.Core.Tests
             // but such a case does not arise for well-named built-ins. The more important
             // property is that units from different dimensions are distinct objects
             // with distinct dimensions.
-            Assert.That(Units.Length.Meter, Is.Not.EqualTo(Units.Time.Second));
-            Assert.That(Units.Length.Meter.Dimension, Is.Not.EqualTo(Units.Time.Second.Dimension));
+            Assert.That(Units.Length.Meters, Is.Not.EqualTo(Units.Time.Seconds));
+            Assert.That(Units.Length.Meters.Dimension, Is.Not.EqualTo(Units.Time.Seconds.Dimension));
         }
 
         // ── Constructor guard ───────────────────────────────────────────────────

@@ -1,6 +1,8 @@
 <Solution>
   <Folder Name="/Tests/">
     <Project Path="tests/UnitRegistry.Core.Tests/UnitRegistry.Core.Tests.csproj" />
+    <Project Path="tests/UnitRegistry.Formatting.Tests/UnitRegistry.Formatting.Tests.csproj" />
   </Folder>
   <Project Path="src/UnitRegistry.Core/UnitRegistry.Core.csproj" />
+  <Project Path="src/UnitRegistry.Formatting/UnitRegistry.Formatting.csproj" />
 </Solution>

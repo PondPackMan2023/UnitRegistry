@@ -6,14 +6,14 @@ namespace UnitRegistry
     /// <summary>
     /// Provides explicit registration, lookup, and discovery for known units.
     /// </summary>
-    public class UnitRegistry
+    public class UnitsRegistry
     {
-        private static readonly Lazy<UnitRegistry> s_default = new Lazy<UnitRegistry>(CreateDefault);
+        private static readonly Lazy<UnitsRegistry> s_default = new Lazy<UnitsRegistry>(CreateDefault);
 
         private readonly Dictionary<Dimension, Dictionary<UnitId, Unit>> unitsByDimension;
         private readonly Dictionary<Dimension, Unit> baseUnitsByDimension;
 
-        public UnitRegistry()
+        public UnitsRegistry()
         {
             unitsByDimension = new Dictionary<Dimension, Dictionary<UnitId, Unit>>();
             baseUnitsByDimension = new Dictionary<Dimension, Unit>();
@@ -22,7 +22,7 @@ namespace UnitRegistry
         /// <summary>
         /// Gets the lazily initialized built-in registry.
         /// </summary>
-        public static UnitRegistry Default
+        public static UnitsRegistry Default
         {
             get { return s_default.Value; }
         }
@@ -193,9 +193,9 @@ namespace UnitRegistry
             }
         }
 
-        private static UnitRegistry CreateDefault()
+        private static UnitsRegistry CreateDefault()
         {
-            var registry = new UnitRegistry();
+            var registry = new UnitsRegistry();
 
             registry.RegisterBaseUnit(Units.Length.Meter);
             registry.Register(Units.Length.Millimeter);

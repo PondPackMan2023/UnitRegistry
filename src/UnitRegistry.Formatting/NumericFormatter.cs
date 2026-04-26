@@ -20,7 +20,7 @@ namespace UnitRegistry.Formatting
         /// <summary>
         /// Gets the unit registry used for unit lookups and conversion.
         /// </summary>
-        public UnitRegistry UnitRegistry { get; }
+        public UnitsRegistry UnitRegistry { get; }
 
         /// <summary>
         /// Gets the numeric format specifier used by this formatter.
@@ -48,7 +48,7 @@ namespace UnitRegistry.Formatting
         /// <param name="formatProvider">Format provider for culture-specific formatting. If null, uses current culture.</param>
         public NumericFormatter(
             NumericFormatterId id,
-            UnitRegistry unitRegistry,
+            UnitsRegistry unitRegistry,
             string formatSpecifier = "G",
             IFormatProvider formatProvider = null)
         {
@@ -82,7 +82,7 @@ namespace UnitRegistry.Formatting
         /// <param name="formatProvider">Format provider for culture-specific formatting. If null, uses current culture.</param>
         public NumericFormatter(
             string id,
-            UnitRegistry unitRegistry,
+            UnitsRegistry unitRegistry,
             string formatSpecifier = "G",
             IFormatProvider formatProvider = null)
             : this(new NumericFormatterId(id), unitRegistry, formatSpecifier, formatProvider)

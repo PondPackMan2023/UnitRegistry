@@ -64,7 +64,15 @@ It is particularly appropriate where **semantic correctness, clarity, and long-t
 - Compatible with .NET Framework, .NET Core, and modern .NET runtimes
 - No global static state requirements
 
-The library is designed to integrate naturally with higher-level constructs such as numeric formatters, presentation models, and visualization systems without depending on them directly.
+UnitRegistry is designed to integrate naturally with higher-level constructs such as numeric formatters, presentation models, and visualization systems without depending on them directly.
+
+---
+
+## Formatting and Display (Planned)
+
+Numeric formatting and display concerns are intentionally **out of scope** for `UnitRegistry.Core`.
+
+A future layered component (e.g., **`UnitRegistry.Formatting`**) is expected to build on top of the core library to provide concepts such as numeric formatters, precision control, and display-unit selection without compromising the stability or purity of the core semantic model.
 
 ---
 
@@ -80,6 +88,18 @@ Extensibility is explicit and deterministic by design.
 
 ---
 
+## Design Notes
+
+Architectural intent and non-goals are documented under:
+
+```
+docs/design/
+```
+
+These documents describe the guiding principles behind the library and are intended to prevent scope creep as the project evolves.
+
+---
+
 ## Licensing
 
 UnitRegistry is released under the **MIT License**.
@@ -90,5 +110,6 @@ Units, dimensions, and conversion mathematics represent real-world facts and est
 
 ## Status
 
-This repository represents a foundational semantic layer.  
+This repository represents a foundational semantic layer.
+
 Development is intentionally incremental and focused on correctness, clarity, and long-term maintainability.

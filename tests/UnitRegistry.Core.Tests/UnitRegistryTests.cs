@@ -12,12 +12,12 @@ namespace UnitRegistry.Core.Tests
         {
             var registry = new UnitsRegistry();
 
-            registry.RegisterBaseUnit(Units.Length.Meter);
-            registry.Register(Units.Length.Millimeter);
-            registry.Register(Units.Length.Foot);
+            registry.RegisterBaseUnit(Units.Length.Meters);
+            registry.Register(Units.Length.Millimeters);
+            registry.Register(Units.Length.Feet);
 
-            Assert.That(registry.GetBaseUnit(Dimensions.Length), Is.SameAs(Units.Length.Meter));
-            Assert.That(registry.GetUnit(Dimensions.Length, new UnitId("millimeter")), Is.SameAs(Units.Length.Millimeter));
+            Assert.That(registry.GetBaseUnit(Dimensions.Length), Is.SameAs(Units.Length.Meters));
+            Assert.That(registry.GetUnit(Dimensions.Length, new UnitId("millimeters")), Is.SameAs(Units.Length.Millimeters));
         }
 
         [Test]
@@ -25,10 +25,10 @@ namespace UnitRegistry.Core.Tests
         {
             var registry = new UnitsRegistry();
 
-            registry.RegisterBaseUnit(Units.Length.Meter);
+            registry.RegisterBaseUnit(Units.Length.Meters);
 
             Assert.That(
-                () => registry.Register(new Unit(new UnitId("meter"), Dimensions.Length, 2.0)),
+                () => registry.Register(new Unit(new UnitId("meters"), Dimensions.Length, 2.0)),
                 Throws.InvalidOperationException);
         }
 
@@ -49,9 +49,9 @@ namespace UnitRegistry.Core.Tests
         {
             var registry = new UnitsRegistry();
 
-            registry.RegisterBaseUnit(Units.Length.Meter);
+            registry.RegisterBaseUnit(Units.Length.Meters);
 
-            Assert.That(() => registry.RegisterBaseUnit(Units.Length.Foot), Throws.InvalidOperationException);
+            Assert.That(() => registry.RegisterBaseUnit(Units.Length.Feet), Throws.InvalidOperationException);
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace UnitRegistry.Core.Tests
         {
             var registry = new UnitsRegistry();
 
-            registry.Register(Units.Length.Foot);
+            registry.Register(Units.Length.Feet);
 
             Assert.That(() => registry.Freeze(), Throws.InvalidOperationException);
         }
@@ -69,12 +69,13 @@ namespace UnitRegistry.Core.Tests
         {
             var registry = new UnitsRegistry();
 
-            registry.RegisterBaseUnit(Units.Time.Second);
-            registry.Register(Units.Time.Minute);
+            registry.RegisterBaseUnit(Units.Time.Hours);
+            registry.Register(Units.Time.Minutes);
+            registry.Register(Units.Time.Seconds);
 
-            Assert.That(registry.TryGetUnit(Dimensions.Time, new UnitId("minute"), out var unit), Is.True);
-            Assert.That(unit, Is.SameAs(Units.Time.Minute));
-            Assert.That(registry.GetUnit(Dimensions.Time, new UnitId("second")), Is.SameAs(Units.Time.Second));
+            Assert.That(registry.TryGetUnit(Dimensions.Time, new UnitId("minutes"), out var unit), Is.True);
+            Assert.That(unit, Is.SameAs(Units.Time.Minutes));
+            Assert.That(registry.GetUnit(Dimensions.Time, new UnitId("seconds")), Is.SameAs(Units.Time.Seconds));
         }
 
         [Test]
@@ -94,16 +95,16 @@ namespace UnitRegistry.Core.Tests
         {
             var registry = new UnitsRegistry();
 
-            registry.RegisterBaseUnit(Units.Length.Meter);
-            registry.Register(Units.Length.Millimeter);
-            registry.Register(Units.Length.Foot);
+            registry.RegisterBaseUnit(Units.Length.Meters);
+            registry.Register(Units.Length.Millimeters);
+            registry.Register(Units.Length.Feet);
 
             var units = registry.GetUnits(Dimensions.Length).ToArray();
 
             Assert.That(units, Has.Length.EqualTo(3));
-            Assert.That(units, Has.Member(Units.Length.Meter));
-            Assert.That(units, Has.Member(Units.Length.Millimeter));
-            Assert.That(units, Has.Member(Units.Length.Foot));
+            Assert.That(units, Has.Member(Units.Length.Meters));
+            Assert.That(units, Has.Member(Units.Length.Millimeters));
+            Assert.That(units, Has.Member(Units.Length.Feet));
         }
 
         [Test]
@@ -111,10 +112,10 @@ namespace UnitRegistry.Core.Tests
         {
             var registry = UnitsRegistry.Default;
 
-            Assert.That(registry.GetBaseUnit(Dimensions.Length), Is.SameAs(Units.Length.Meter));
-            Assert.That(registry.GetBaseUnit(Dimensions.Time), Is.SameAs(Units.Time.Second));
-            Assert.That(registry.GetUnit(Dimensions.Length, Units.Length.Foot.Id), Is.SameAs(Units.Length.Foot));
-            Assert.That(registry.GetUnit(Dimensions.Time, Units.Time.Hour.Id), Is.SameAs(Units.Time.Hour));
+            Assert.That(registry.GetBaseUnit(Dimensions.Length), Is.SameAs(Units.Length.Meters));
+            Assert.That(registry.GetBaseUnit(Dimensions.Time), Is.SameAs(Units.Time.Hours));
+            Assert.That(registry.GetUnit(Dimensions.Length, Units.Length.Feet.Id), Is.SameAs(Units.Length.Feet));
+            Assert.That(registry.GetUnit(Dimensions.Time, Units.Time.Hours.Id), Is.SameAs(Units.Time.Hours));
         }
 
         [Test]
@@ -130,7 +131,7 @@ namespace UnitRegistry.Core.Tests
         {
             var registry = new UnitsRegistry();
 
-            registry.RegisterBaseUnit(Units.Length.Meter);
+            registry.RegisterBaseUnit(Units.Length.Meters);
             registry.Freeze();
 
             Assert.That(

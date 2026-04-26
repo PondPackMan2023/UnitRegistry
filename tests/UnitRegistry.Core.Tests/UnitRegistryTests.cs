@@ -10,7 +10,7 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void RegistersValidUnitsSuccessfully()
         {
-            var registry = new UnitRegistry();
+            var registry = new UnitsRegistry();
 
             registry.RegisterBaseUnit(Units.Length.Meter);
             registry.Register(Units.Length.Millimeter);
@@ -23,7 +23,7 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void RejectsDuplicateDimensionAndUnitKey()
         {
-            var registry = new UnitRegistry();
+            var registry = new UnitsRegistry();
 
             registry.RegisterBaseUnit(Units.Length.Meter);
 
@@ -35,7 +35,7 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void AllowsSameUnitKeyInDifferentDimensions()
         {
-            var registry = new UnitRegistry();
+            var registry = new UnitsRegistry();
 
             registry.RegisterBaseUnit(new Unit(new UnitId("base"), Dimensions.Length, 1.0));
             registry.RegisterBaseUnit(new Unit(new UnitId("base"), Dimensions.Time, 1.0));
@@ -47,7 +47,7 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void RejectsSecondBaseUnitForSameDimension()
         {
-            var registry = new UnitRegistry();
+            var registry = new UnitsRegistry();
 
             registry.RegisterBaseUnit(Units.Length.Meter);
 
@@ -57,7 +57,7 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void FreezeRequiresBaseUnitForEachRegisteredDimension()
         {
-            var registry = new UnitRegistry();
+            var registry = new UnitsRegistry();
 
             registry.Register(Units.Length.Foot);
 
@@ -67,7 +67,7 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void LooksUpUnitsByDimensionAndKey()
         {
-            var registry = new UnitRegistry();
+            var registry = new UnitsRegistry();
 
             registry.RegisterBaseUnit(Units.Time.Second);
             registry.Register(Units.Time.Minute);
@@ -80,7 +80,7 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void DuplicateUnitIdIsRejectedPerDimension()
         {
-            var registry = new UnitRegistry();
+            var registry = new UnitsRegistry();
 
             registry.RegisterBaseUnit(new Unit(new UnitId("base"), Dimensions.Length, 1.0));
 
@@ -92,7 +92,7 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void EnumeratesUnitsForDimension()
         {
-            var registry = new UnitRegistry();
+            var registry = new UnitsRegistry();
 
             registry.RegisterBaseUnit(Units.Length.Meter);
             registry.Register(Units.Length.Millimeter);
@@ -109,7 +109,7 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void DefaultRegistryIsPrePopulated()
         {
-            var registry = UnitRegistry.Default;
+            var registry = UnitsRegistry.Default;
 
             Assert.That(registry.GetBaseUnit(Dimensions.Length), Is.SameAs(Units.Length.Meter));
             Assert.That(registry.GetBaseUnit(Dimensions.Time), Is.SameAs(Units.Time.Second));
@@ -121,14 +121,14 @@ namespace UnitRegistry.Core.Tests
         public void DefaultRegistryRejectsMutationAfterInitialization()
         {
             Assert.That(
-                () => UnitRegistry.Default.Register(new Unit(new UnitId("yard"), Dimensions.Length, 0.9144)),
+                () => UnitsRegistry.Default.Register(new Unit(new UnitId("yard"), Dimensions.Length, 0.9144)),
                 Throws.InvalidOperationException);
         }
 
         [Test]
         public void FrozenCustomRegistryRejectsMutation()
         {
-            var registry = new UnitRegistry();
+            var registry = new UnitsRegistry();
 
             registry.RegisterBaseUnit(Units.Length.Meter);
             registry.Freeze();
@@ -141,7 +141,7 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void RegistrationRejectsNullUnit()
         {
-            var registry = new UnitRegistry();
+            var registry = new UnitsRegistry();
 
             Assert.That(() => registry.Register(null), Throws.ArgumentNullException);
             Assert.That(() => registry.RegisterBaseUnit(null), Throws.ArgumentNullException);

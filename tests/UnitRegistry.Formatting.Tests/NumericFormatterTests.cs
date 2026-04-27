@@ -125,47 +125,39 @@ namespace UnitRegistry.Formatting.Tests
         // ── Format with source unit only ────────────────────────────────────────
 
         [Test]
-        public void FormatWithSourceUnitAppliesFormatSpecifier()
+        public void FormatAppliesFormatSpecifier()
         {
             var formatter = new NumericFormatter("fixed", UnitsRegistry.Default, "F2");
             double value = 1.23456;
 
-            string result = formatter.Format(value, Units.Length.Meter);
+            string result = formatter.Format(value);
 
             Assert.That(result, Is.EqualTo("1.23"));
         }
 
         [Test]
-        public void FormatWithSourceUnitGeneralFormat()
+        public void FormatGeneralFormat()
         {
             var formatter = new NumericFormatter("general", UnitsRegistry.Default, "G");
             double value = 123.456;
 
-            string result = formatter.Format(value, Units.Length.Meter);
+            string result = formatter.Format(value);
 
             Assert.That(result, Is.EqualTo("123.456"));
         }
 
         [Test]
-        public void FormatWithSourceUnitScientific()
+        public void FormatScientific()
         {
             var formatter = new NumericFormatter("scientific", UnitsRegistry.Default, "E2");
             double value = 1234.5;
 
-            string result = formatter.Format(value, Units.Time.Second);
+            string result = formatter.Format(value);
 
             Assert.That(result, Is.EqualTo("1.23E+003"));
         }
 
-        [Test]
-        public void FormatWithSourceUnitNullThrows()
-        {
-            var formatter = new NumericFormatter("test", UnitsRegistry.Default);
 
-            Assert.That(
-                () => formatter.Format(42.0, null),
-                Throws.ArgumentNullException);
-        }
 
         // ── Format with display unit conversion ─────────────────────────────────
 
@@ -241,7 +233,7 @@ namespace UnitRegistry.Formatting.Tests
             var germanCulture = new CultureInfo("de-DE");
             var formatter = new NumericFormatter("german", UnitsRegistry.Default, "F2", germanCulture);
 
-            string result = formatter.Format(1.5, Units.Length.Meter);
+            string result = formatter.Format(1.5);
 
             // German uses comma as decimal separator
             Assert.That(result, Is.EqualTo("1,50"));
@@ -256,7 +248,7 @@ namespace UnitRegistry.Formatting.Tests
                 "F2",
                 CultureInfo.InvariantCulture);
 
-            string result = formatter.Format(1.5, Units.Length.Meter);
+            string result = formatter.Format(1.5);
 
             Assert.That(result, Is.EqualTo("1.50"));
         }

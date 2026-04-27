@@ -90,18 +90,12 @@ namespace UnitRegistry.Formatting
         }
 
         /// <summary>
-        /// Formats a numeric value expressed in the source unit.
+        /// Formats a numeric value.
         /// </summary>
         /// <param name="value">The numeric value to format.</param>
-        /// <param name="sourceUnit">The unit the value is expressed in.</param>
         /// <returns>A formatted string representation of the value.</returns>
-        public string Format(double value, Unit sourceUnit)
+        public string Format(double value)
         {
-            if (sourceUnit == null)
-            {
-                throw new ArgumentNullException(nameof(sourceUnit));
-            }
-
             return value.ToString(FormatSpecifier, FormatProvider);
         }
 

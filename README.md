@@ -1,10 +1,14 @@
 # UnitRegistry
 
-2026-April
+**April 2026**
 
-UnitRegistry is a lightweight, domain-agnostic library for managing physical units, dimensions, and unit conversion semantics in engineering software.
+UnitRegistry is a lightweight, domain-agnostic .NET library for managing physical **units**, **dimensions**, **unit conversion semantics**, and **numeric formatting policy** in engineering software.
 
-It provides a small, explicit foundation for working with physical quantities—such as length, time, pressure, and flow—without imposing application-specific assumptions, UI concerns, or numeric formatting policy.
+It is designed as a **layered, foundational library** that cleanly separates:
+- **What values mean** (unit semantics)
+- **How values are displayed** (numeric formatting and presentation)
+
+This separation allows UnitRegistry to serve as a long-lived dependency for engineering applications without introducing UI coupling or product-specific assumptions.
 
 ---
 
@@ -14,32 +18,99 @@ UnitRegistry is designed to:
 
 - Treat **units and dimensions as first-class semantic concepts**
 - Provide **deterministic, mathematically correct unit conversions**
-- Support **extensibility** for custom units and engineering domains
-- Remain **low-level and reusable** across long-lived engineering codebases
-- Avoid unnecessary coupling to UI, rendering, or application logic
+- Support **explicit identity models** instead of enums or strings
+- Allow **extensibility** for custom units, dimensions, and domains
+- Cleanly separate **semantics** from **presentation policy**
+- Remain **low-level, reusable, and UI-agnostic**
 
-The library intentionally focuses on *what units are* and *how they relate*, not on how they are displayed or visualized.
-
----
-
-## What UnitRegistry Provides
-
-- Definitions for physical **dimensions** (e.g., Length, Time, Pressure)
-- Definitions for **units** within a single dimension
-- Conversion rules to and from canonical base units
-- A **registry abstraction** for discovering and extending known units
+The library explicitly avoids mixing semantic meaning with formatting or application workflow logic.
 
 ---
 
-## What UnitRegistry Does Not Provide
+## Architecture Overview
 
-- UI or visualization components
-- Domain-specific assumptions or workflows
-- Numeric formatting or presentation logic
-- Physical equations or dimensional algebra
-- Product- or application-level behavior
+UnitRegistry is composed of two primary layers with a strict dependency direction:
 
-These concerns are intentionally left to higher-level libraries and applications.
+```
+UnitRegistry.Core        (unit semantics)
+        ↑
+UnitRegistry.Formatting  (presentation policy)
+```
+
+Higher-level applications and libraries build on these layers as needed.
+
+---
+
+## UnitRegistry.Core
+
+`UnitRegistry.Core` is responsible for **unit semantics only**.
+
+It provides:
+
+- **Dimensions**
+  - Immutable semantic identities (e.g., Length, Time, Pressure)
+  - No derived algebra or equations
+
+- **UnitId**
+  - Explicit, immutable identity value object
+  - Eliminates stringly-typed unit identification
+
+- **Unit**
+  - Immutable representation of a unit within a single dimension
+  - Conversion defined strictly via canonical base units
+  - Conversion path is always: `source → base → target`
+
+- **UnitRegistry**
+  - Authoritative container for known units
+  - Enforces invariants:
+    - Unique `(Dimension, UnitId)` pairs
+    - Exactly one base unit per dimension
+  - Provides lookup and discovery APIs
+  - Ships with a frozen default registry for standard usage
+
+### What Core Does *Not* Provide
+
+- Numeric formatting or presentation policy
+- UI or visualization concerns
+- Domain-specific workflows
+- Storage or persistence concepts
+- Parsing of formatted values
+
+`UnitRegistry.Core` is intentionally small, explicit, and semantically strict.
+
+---
+
+## UnitRegistry.Formatting
+
+`UnitRegistry.Formatting` builds **on top of UnitRegistry.Core** and is responsible for **presentation policy only**.
+
+It provides:
+
+- **NumericFormatterId**
+  - Explicit identity for formatter configurations
+  - Mirrors the `UnitId` identity model
+
+- **NumericFormatter**
+  - Object-based numeric formatting policy
+  - Depends explicitly on a `UnitRegistry`
+  - Formats numeric values expressed in a `Unit` into strings
+
+Supported formatting concerns include:
+
+- Standard .NET numeric format strings
+- Precision control
+- Culture-aware formatting
+- Optional display-unit overrides
+
+### What Formatting Does *Not* Provide
+
+- Unit semantics or conversion rules
+- Storage-unit concepts
+- Parsing strings back into numeric values
+- Auto-scaling or heuristic unit selection
+- Dependencies on UI frameworks
+
+All semantic conversion logic remains owned by `Unit` in `UnitRegistry.Core`.
 
 ---
 
@@ -47,56 +118,38 @@ These concerns are intentionally left to higher-level libraries and applications
 
 UnitRegistry is well suited for:
 
-- Engineering visualization and charting systems
-- Simulation and modeling software
-- Technical desktop applications
+- Engineering modeling and simulation software
+- Technical desktop and web applications
+- Engineering graphing and visualization controls
 - Shared infrastructure libraries
-- Domain-specific engineering tools
+- Long-lived domain-specific engineering tools
 
-It is particularly appropriate where **semantic correctness, clarity, and long-term stability** are more important than convenience shortcuts.
+It is particularly appropriate when **semantic correctness, clarity, and architectural separation** matter more than convenience shortcuts.
 
 ---
 
-## Architecture
+## Target Framework & Compatibility
 
 - Target framework: **netstandard2.0**
 - No platform-specific dependencies
-- Compatible with .NET Framework, .NET Core, and modern .NET runtimes
-- No global static state requirements
+- Compatible with:
+  - .NET Framework
+  - .NET Core
+  - Modern .NET runtimes
 
-UnitRegistry is designed to integrate naturally with higher-level constructs such as numeric formatters, presentation models, and visualization systems without depending on them directly.
-
----
-
-## Formatting and Display (Planned)
-
-Numeric formatting and display concerns are intentionally **out of scope** for `UnitRegistry.Core`.
-
-A future layered component (e.g., **`UnitRegistry.Formatting`**) is expected to build on top of the core library to provide concepts such as numeric formatters, precision control, and display-unit selection without compromising the stability or purity of the core semantic model.
+The library is safe to consume from UI frameworks, services, and shared libraries.
 
 ---
 
-## Extensibility
+## Design Documentation
 
-UnitRegistry supports extension through explicit registration mechanisms, allowing consumers to:
-
-- Introduce new dimensions
-- Add custom units
-- Replace or compose registries for domain-specific use cases
-
-Extensibility is explicit and deterministic by design.
-
----
-
-## Design Notes
-
-Architectural intent and non-goals are documented under:
+Architectural intent, non-goals, and layering decisions are documented under:
 
 ```
 docs/design/
 ```
 
-These documents describe the guiding principles behind the library and are intended to prevent scope creep as the project evolves.
+These documents exist to prevent scope creep and preserve long-term design clarity.
 
 ---
 
@@ -110,6 +163,10 @@ Units, dimensions, and conversion mathematics represent real-world facts and est
 
 ## Status
 
-This repository represents a foundational semantic layer.
+UnitRegistry represents a **foundational semantic and formatting layer**.
 
-Development is intentionally incremental and focused on correctness, clarity, and long-term maintainability.
+Development is intentionally incremental and focused on:
+- Correctness
+- Explicitness
+- API stability
+- Long-term maintainability

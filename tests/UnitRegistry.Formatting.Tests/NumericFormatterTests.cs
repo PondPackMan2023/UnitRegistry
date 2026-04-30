@@ -15,10 +15,11 @@ namespace UnitRegistry.Formatting.Tests
             var id = new NumericFormatterId("default");
             var registry = UnitsRegistry.Default;
 
-            var formatter = new NumericFormatter(id, registry);
+            var formatter = new NumericFormatter(id, registry, "default label");
 
             Assert.That(formatter.Id, Is.EqualTo(id));
             Assert.That(formatter.UnitRegistry, Is.SameAs(registry));
+            Assert.That(formatter.Label, Is.EqualTo("default label"));
         }
 
         [Test]
@@ -26,7 +27,7 @@ namespace UnitRegistry.Formatting.Tests
         {
             var registry = UnitsRegistry.Default;
 
-            var formatter = new NumericFormatter("default", registry);
+            var formatter = new NumericFormatter("default", registry, "label");
 
             Assert.That(formatter.Id, Is.EqualTo(new NumericFormatterId("default")));
             Assert.That(formatter.UnitRegistry, Is.SameAs(registry));
@@ -36,7 +37,7 @@ namespace UnitRegistry.Formatting.Tests
         public void FormatterIdentityIsDiscoverable()
         {
             var id = new NumericFormatterId("compact");
-            var formatter = new NumericFormatter(id, UnitsRegistry.Default);
+            var formatter = new NumericFormatter(id, UnitsRegistry.Default, "label");
 
             Assert.That(formatter.Id.Value, Is.EqualTo("compact"));
         }
@@ -45,7 +46,7 @@ namespace UnitRegistry.Formatting.Tests
         public void NullIdThrows()
         {
             Assert.That(
-                () => new NumericFormatter((NumericFormatterId)null, UnitsRegistry.Default),
+                () => new NumericFormatter((NumericFormatterId)null, UnitsRegistry.Default, "label"),
                 Throws.ArgumentNullException);
         }
 
@@ -53,7 +54,7 @@ namespace UnitRegistry.Formatting.Tests
         public void NullRegistryThrows()
         {
             Assert.That(
-                () => new NumericFormatter(new NumericFormatterId("default"), null),
+                () => new NumericFormatter(new NumericFormatterId("default"), null, "label"),
                 Throws.ArgumentNullException);
         }
 
@@ -61,14 +62,38 @@ namespace UnitRegistry.Formatting.Tests
         public void NullStringIdThrows()
         {
             Assert.That(
-                () => new NumericFormatter((string)null, UnitsRegistry.Default),
+                () => new NumericFormatter((string)null, UnitsRegistry.Default, "label"),
                 Throws.ArgumentNullException);
+        }
+
+        [Test]
+        public void NullLabelThrows()
+        {
+            Assert.That(
+                () => new NumericFormatter("default", UnitsRegistry.Default, null),
+                Throws.ArgumentNullException);
+        }
+
+        [Test]
+        public void EmptyLabelThrows()
+        {
+            Assert.That(
+                () => new NumericFormatter("default", UnitsRegistry.Default, ""),
+                Throws.ArgumentException);
+        }
+
+        [Test]
+        public void SingleSpaceLabelIsAllowed()
+        {
+            var formatter = new NumericFormatter("default", UnitsRegistry.Default, " ");
+
+            Assert.That(formatter.Label, Is.EqualTo(" "));
         }
 
         [Test]
         public void ToStringReturnsFormatterId()
         {
-            var formatter = new NumericFormatter("default", UnitsRegistry.Default);
+            var formatter = new NumericFormatter("default", UnitsRegistry.Default, "label");
 
             Assert.That(formatter.ToString(), Is.EqualTo("default"));
         }
@@ -78,7 +103,7 @@ namespace UnitRegistry.Formatting.Tests
         [Test]
         public void DefaultFormatSpecifierIsG()
         {
-            var formatter = new NumericFormatter("default", UnitsRegistry.Default);
+            var formatter = new NumericFormatter("default", UnitsRegistry.Default, "label");
 
             Assert.That(formatter.FormatSpecifier, Is.EqualTo("G"));
         }
@@ -86,7 +111,7 @@ namespace UnitRegistry.Formatting.Tests
         [Test]
         public void CustomFormatSpecifierIsRespected()
         {
-            var formatter = new NumericFormatter("fixed", UnitsRegistry.Default, "F2");
+            var formatter = new NumericFormatter("fixed", UnitsRegistry.Default, "label", "F2");
 
             Assert.That(formatter.FormatSpecifier, Is.EqualTo("F2"));
         }
@@ -95,20 +120,20 @@ namespace UnitRegistry.Formatting.Tests
         public void NullOrWhitespaceFormatSpecifierThrows()
         {
             Assert.That(
-                () => new NumericFormatter("test", UnitsRegistry.Default, null),
+                () => new NumericFormatter("test", UnitsRegistry.Default, "label", null),
                 Throws.ArgumentException);
             Assert.That(
-                () => new NumericFormatter("test", UnitsRegistry.Default, ""),
+                () => new NumericFormatter("test", UnitsRegistry.Default, "label", ""),
                 Throws.ArgumentException);
             Assert.That(
-                () => new NumericFormatter("test", UnitsRegistry.Default, "   "),
+                () => new NumericFormatter("test", UnitsRegistry.Default, "label", "   "),
                 Throws.ArgumentException);
         }
 
         [Test]
         public void FormatProviderDefaultsToNull()
         {
-            var formatter = new NumericFormatter("default", UnitsRegistry.Default);
+            var formatter = new NumericFormatter("default", UnitsRegistry.Default, "label");
 
             Assert.That(formatter.FormatProvider, Is.Null);
         }
@@ -117,7 +142,7 @@ namespace UnitRegistry.Formatting.Tests
         public void CustomFormatProviderIsStored()
         {
             var culture = new CultureInfo("de-DE");
-            var formatter = new NumericFormatter("german", UnitsRegistry.Default, "F2", culture);
+            var formatter = new NumericFormatter("german", UnitsRegistry.Default, "label", "F2", culture);
 
             Assert.That(formatter.FormatProvider, Is.SameAs(culture));
         }
@@ -127,7 +152,7 @@ namespace UnitRegistry.Formatting.Tests
         [Test]
         public void FormatAppliesFormatSpecifier()
         {
-            var formatter = new NumericFormatter("fixed", UnitsRegistry.Default, "F2");
+            var formatter = new NumericFormatter("fixed", UnitsRegistry.Default, "label", "F2");
             double value = 1.23456;
 
             string result = formatter.Format(value);
@@ -138,7 +163,7 @@ namespace UnitRegistry.Formatting.Tests
         [Test]
         public void FormatGeneralFormat()
         {
-            var formatter = new NumericFormatter("general", UnitsRegistry.Default, "G");
+            var formatter = new NumericFormatter("general", UnitsRegistry.Default, "label", "G");
             double value = 123.456;
 
             string result = formatter.Format(value);
@@ -149,7 +174,7 @@ namespace UnitRegistry.Formatting.Tests
         [Test]
         public void FormatScientific()
         {
-            var formatter = new NumericFormatter("scientific", UnitsRegistry.Default, "E2");
+            var formatter = new NumericFormatter("scientific", UnitsRegistry.Default, "label", "E2");
             double value = 1234.5;
 
             string result = formatter.Format(value);
@@ -164,7 +189,7 @@ namespace UnitRegistry.Formatting.Tests
         [Test]
         public void FormatWithDisplayUnitConvertsCorrectly()
         {
-            var formatter = new NumericFormatter("foot", UnitsRegistry.Default, "F4");
+            var formatter = new NumericFormatter("foot", UnitsRegistry.Default, "label", "F4");
 
             // 1 meter = 3.28084 feet
             string result = formatter.Format(1.0, Units.Length.Meter, Units.Length.Foot);
@@ -175,7 +200,7 @@ namespace UnitRegistry.Formatting.Tests
         [Test]
         public void FormatWithDisplayUnitRoundTrips()
         {
-            var formatter = new NumericFormatter("roundtrip", UnitsRegistry.Default, "F6");
+            var formatter = new NumericFormatter("roundtrip", UnitsRegistry.Default, "label", "F6");
 
             // Convert to mm and back
             string result = formatter.Format(123.456, Units.Length.Meter, Units.Length.Millimeter);
@@ -187,7 +212,7 @@ namespace UnitRegistry.Formatting.Tests
         [Test]
         public void FormatWithTimeUnitConversion()
         {
-            var formatter = new NumericFormatter("hours", UnitsRegistry.Default, "F2");
+            var formatter = new NumericFormatter("hours", UnitsRegistry.Default, "label", "F2");
 
             // 1 hour = 3600 seconds
             string result = formatter.Format(3600.0, Units.Time.Second, Units.Time.Hour);
@@ -198,7 +223,7 @@ namespace UnitRegistry.Formatting.Tests
         [Test]
         public void FormatWithDisplayUnitNullSourceThrows()
         {
-            var formatter = new NumericFormatter("test", UnitsRegistry.Default);
+            var formatter = new NumericFormatter("test", UnitsRegistry.Default, "label");
 
             Assert.That(
                 () => formatter.Format(42.0, null, Units.Length.Foot),
@@ -208,7 +233,7 @@ namespace UnitRegistry.Formatting.Tests
         [Test]
         public void FormatWithDisplayUnitNullDisplayThrows()
         {
-            var formatter = new NumericFormatter("test", UnitsRegistry.Default);
+            var formatter = new NumericFormatter("test", UnitsRegistry.Default, "label");
 
             Assert.That(
                 () => formatter.Format(42.0, Units.Length.Meter, null),
@@ -218,7 +243,7 @@ namespace UnitRegistry.Formatting.Tests
         [Test]
         public void FormatWithCrossDimensionUnitsThrows()
         {
-            var formatter = new NumericFormatter("invalid", UnitsRegistry.Default);
+            var formatter = new NumericFormatter("invalid", UnitsRegistry.Default, "label");
 
             Assert.That(
                 () => formatter.Format(42.0, Units.Length.Meter, Units.Time.Second),
@@ -231,7 +256,7 @@ namespace UnitRegistry.Formatting.Tests
         public void FormatWithGermanCultureUsesCommaDecimal()
         {
             var germanCulture = new CultureInfo("de-DE");
-            var formatter = new NumericFormatter("german", UnitsRegistry.Default, "F2", germanCulture);
+            var formatter = new NumericFormatter("german", UnitsRegistry.Default, "label", "F2", germanCulture);
 
             string result = formatter.Format(1.5);
 
@@ -242,11 +267,7 @@ namespace UnitRegistry.Formatting.Tests
         [Test]
         public void FormatWithInvariantCultureUsesDotDecimal()
         {
-            var formatter = new NumericFormatter(
-                "invariant",
-                UnitsRegistry.Default,
-                "F2",
-                CultureInfo.InvariantCulture);
+            var formatter = new NumericFormatter("invariant", UnitsRegistry.Default, "label", "F2", CultureInfo.InvariantCulture);
 
             string result = formatter.Format(1.5);
 

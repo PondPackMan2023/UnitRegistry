@@ -11,8 +11,8 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void SameKeyUnitsAreEqual()
         {
-            var left = new Unit(new UnitId("meter"), Dimensions.Length, 1.0);
-            var right = new Unit(new UnitId("meter"), Dimensions.Length, 1.0);
+            var left = new Unit(new UnitId("meter"), Dimensions.Length, 1.0, "");
+            var right = new Unit(new UnitId("meter"), Dimensions.Length, 1.0, "");
 
             Assert.That(left, Is.EqualTo(right));
             Assert.That(left == right, Is.True);
@@ -22,8 +22,8 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void DifferentKeyUnitsAreNotEqual()
         {
-            var left = new Unit(new UnitId("meter"), Dimensions.Length, 1.0);
-            var right = new Unit(new UnitId("foot"), Dimensions.Length, 0.3048);
+            var left = new Unit(new UnitId("meter"), Dimensions.Length, 1.0, "");
+            var right = new Unit(new UnitId("foot"), Dimensions.Length, 0.3048, "");
 
             Assert.That(left, Is.Not.EqualTo(right));
             Assert.That(left == right, Is.False);
@@ -33,8 +33,8 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void EqualUnitsProduceSameHashCode()
         {
-            var left = new Unit(new UnitId("meter"), Dimensions.Length, 1.0);
-            var right = new Unit(new UnitId("meter"), Dimensions.Length, 1.0);
+            var left = new Unit(new UnitId("meter"), Dimensions.Length, 1.0, "");
+            var right = new Unit(new UnitId("meter"), Dimensions.Length, 1.0, "");
 
             Assert.That(left.GetHashCode(), Is.EqualTo(right.GetHashCode()));
         }
@@ -52,7 +52,7 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void UnitIdentityFlowsThroughUnitId()
         {
-            var unit = new Unit(new UnitId("meter"), Dimensions.Length, 1.0);
+            var unit = new Unit(new UnitId("meter"), Dimensions.Length, 1.0, "");
 
             Assert.That(unit.Id, Is.EqualTo(new UnitId("meter")));
             Assert.That(unit.Id.Value, Is.EqualTo("meter"));
@@ -189,35 +189,41 @@ namespace UnitRegistry.Core.Tests
         [Test]
         public void NullOrWhitespaceKeyThrows()
         {
-            Assert.That(() => new Unit((string)null, Dimensions.Length, 1.0), Throws.ArgumentNullException);
-            Assert.That(() => new Unit(string.Empty, Dimensions.Length, 1.0), Throws.ArgumentException);
-            Assert.That(() => new Unit("   ", Dimensions.Length, 1.0), Throws.ArgumentException);
+            Assert.That(() => new Unit((string)null, Dimensions.Length, 1.0, ""), Throws.ArgumentNullException);
+            Assert.That(() => new Unit(string.Empty, Dimensions.Length, 1.0, ""), Throws.ArgumentException);
+            Assert.That(() => new Unit("   ", Dimensions.Length, 1.0, ""), Throws.ArgumentException);
         }
 
         [Test]
         public void NullUnitIdThrows()
         {
-            Assert.That(() => new Unit((UnitId)null, Dimensions.Length, 1.0), Throws.ArgumentNullException);
+            Assert.That(() => new Unit((UnitId)null, Dimensions.Length, 1.0, ""), Throws.ArgumentNullException);
         }
 
         [Test]
         public void NullDimensionThrows()
         {
-            Assert.That(() => new Unit("meter", null, 1.0), Throws.ArgumentNullException);
+            Assert.That(() => new Unit("meter", null, 1.0, ""), Throws.ArgumentNullException);
+        }
+
+        [Test]
+        public void NullLabelThrows()
+        {
+            Assert.That(() => new Unit("meter", Dimensions.Length, 1.0, null), Throws.ArgumentNullException);
         }
 
         [Test]
         public void ZeroOrNegativeConversionFactorThrows()
         {
-            Assert.That(() => new Unit("meter", Dimensions.Length, 0.0), Throws.TypeOf<ArgumentOutOfRangeException>());
-            Assert.That(() => new Unit("meter", Dimensions.Length, -1.0), Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => new Unit("meter", Dimensions.Length, 0.0, ""), Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => new Unit("meter", Dimensions.Length, -1.0, ""), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
         public void NonFiniteConversionFactorThrows()
         {
-            Assert.That(() => new Unit("meter", Dimensions.Length, double.NaN), Throws.TypeOf<ArgumentOutOfRangeException>());
-            Assert.That(() => new Unit("meter", Dimensions.Length, double.PositiveInfinity), Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => new Unit("meter", Dimensions.Length, double.NaN, ""), Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(() => new Unit("meter", Dimensions.Length, double.PositiveInfinity, ""), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
     }
 }

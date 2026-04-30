@@ -24,6 +24,11 @@ namespace UnitRegistry
         public double ConversionFactor { get; }
 
         /// <summary>
+        /// Gets the display label for this unit.
+        /// </summary>
+        public string Label { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Unit"/> class.
         /// </summary>
         /// <param name="id">Stable identity for the unit.</param>
@@ -32,7 +37,8 @@ namespace UnitRegistry
         /// Multiplier that converts a value in this unit to the canonical base unit.
         /// Must be a finite positive number.
         /// </param>
-        public Unit(UnitId id, Dimension dimension, double conversionFactor)
+        /// <param name="label">Display label for the unit. May be empty but not null.</param>
+        public Unit(UnitId id, Dimension dimension, double conversionFactor, string label)
         {
             if (id == null)
             {
@@ -49,9 +55,15 @@ namespace UnitRegistry
                 throw new ArgumentOutOfRangeException(nameof(conversionFactor), "Conversion factor must be a finite positive number.");
             }
 
+            if (label == null)
+            {
+                throw new ArgumentNullException(nameof(label));
+            }
+
             Id = id;
             Dimension = dimension;
             ConversionFactor = conversionFactor;
+            Label = label;
         }
 
         /// <summary>
@@ -63,8 +75,9 @@ namespace UnitRegistry
         /// Multiplier that converts a value in this unit to the canonical base unit.
         /// Must be a finite positive number.
         /// </param>
-        public Unit(string id, Dimension dimension, double conversionFactor)
-            : this(new UnitId(id), dimension, conversionFactor)
+        /// <param name="label">Display label for the unit. May be empty but not null.</param>
+        public Unit(string id, Dimension dimension, double conversionFactor, string label)
+            : this(new UnitId(id), dimension, conversionFactor, label)
         {
         }
 

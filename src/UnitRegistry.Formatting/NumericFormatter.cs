@@ -23,6 +23,11 @@ namespace UnitRegistry.Formatting
         public UnitsRegistry UnitRegistry { get; }
 
         /// <summary>
+        /// Gets the required display label for this formatter.
+        /// </summary>
+        public string Label { get; }
+
+        /// <summary>
         /// Gets the numeric format specifier used by this formatter.
         /// </summary>
         /// <remarks>
@@ -44,11 +49,13 @@ namespace UnitRegistry.Formatting
         /// </summary>
         /// <param name="id">Stable identity for the formatter.</param>
         /// <param name="unitRegistry">Unit registry for unit lookups and conversion.</param>
+        /// <param name="label">Display label for the formatter. Must not be null or empty.</param>
         /// <param name="formatSpecifier">Numeric format specifier (e.g., "F2", "E3", "G"). Defaults to "G".</param>
         /// <param name="formatProvider">Format provider for culture-specific formatting. If null, uses current culture.</param>
         public NumericFormatter(
             NumericFormatterId id,
             UnitsRegistry unitRegistry,
+            string label,
             string formatSpecifier = "G",
             IFormatProvider formatProvider = null)
         {
@@ -62,6 +69,16 @@ namespace UnitRegistry.Formatting
                 throw new ArgumentNullException(nameof(unitRegistry));
             }
 
+            if (label == null)
+            {
+                throw new ArgumentNullException(nameof(label));
+            }
+
+            if (label.Length == 0)
+            {
+                throw new ArgumentException("Label must not be empty.", nameof(label));
+            }
+
             if (string.IsNullOrWhiteSpace(formatSpecifier))
             {
                 throw new ArgumentException("Format specifier must not be null, empty, or whitespace.", nameof(formatSpecifier));
@@ -69,6 +86,7 @@ namespace UnitRegistry.Formatting
 
             Id = id;
             UnitRegistry = unitRegistry;
+            Label = label;
             FormatSpecifier = formatSpecifier;
             FormatProvider = formatProvider;
         }
@@ -78,14 +96,16 @@ namespace UnitRegistry.Formatting
         /// </summary>
         /// <param name="id">Stable identity value for the formatter.</param>
         /// <param name="unitRegistry">Unit registry for unit lookups and conversion.</param>
+        /// <param name="label">Display label for the formatter. Must not be null or empty.</param>
         /// <param name="formatSpecifier">Numeric format specifier (e.g., "F2", "E3", "G"). Defaults to "G".</param>
         /// <param name="formatProvider">Format provider for culture-specific formatting. If null, uses current culture.</param>
         public NumericFormatter(
             string id,
             UnitsRegistry unitRegistry,
+            string label,
             string formatSpecifier = "G",
             IFormatProvider formatProvider = null)
-            : this(new NumericFormatterId(id), unitRegistry, formatSpecifier, formatProvider)
+            : this(new NumericFormatterId(id), unitRegistry, label, formatSpecifier, formatProvider)
         {
         }
 

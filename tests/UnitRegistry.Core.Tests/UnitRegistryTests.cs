@@ -28,7 +28,7 @@ namespace UnitRegistry.Core.Tests
             registry.RegisterBaseUnit(Units.Length.Meters);
 
             Assert.That(
-                () => registry.Register(new Unit(new UnitId("meters"), Dimensions.Length, 2.0)),
+                () => registry.Register(new Unit(new UnitId("meters"), Dimensions.Length, 2.0, "")),
                 Throws.InvalidOperationException);
         }
 
@@ -37,8 +37,8 @@ namespace UnitRegistry.Core.Tests
         {
             var registry = new UnitsRegistry();
 
-            registry.RegisterBaseUnit(new Unit(new UnitId("base"), Dimensions.Length, 1.0));
-            registry.RegisterBaseUnit(new Unit(new UnitId("base"), Dimensions.Time, 1.0));
+            registry.RegisterBaseUnit(new Unit(new UnitId("base"), Dimensions.Length, 1.0, ""));
+            registry.RegisterBaseUnit(new Unit(new UnitId("base"), Dimensions.Time, 1.0, ""));
 
             Assert.That(registry.GetBaseUnit(Dimensions.Length).Dimension, Is.EqualTo(Dimensions.Length));
             Assert.That(registry.GetBaseUnit(Dimensions.Time).Dimension, Is.EqualTo(Dimensions.Time));
@@ -83,10 +83,10 @@ namespace UnitRegistry.Core.Tests
         {
             var registry = new UnitsRegistry();
 
-            registry.RegisterBaseUnit(new Unit(new UnitId("base"), Dimensions.Length, 1.0));
+            registry.RegisterBaseUnit(new Unit(new UnitId("base"), Dimensions.Length, 1.0, ""));
 
             Assert.That(
-                () => registry.Register(new Unit(new UnitId("base"), Dimensions.Length, 2.0)),
+                () => registry.Register(new Unit(new UnitId("base"), Dimensions.Length, 2.0, "")),
                 Throws.InvalidOperationException);
         }
 
@@ -122,7 +122,7 @@ namespace UnitRegistry.Core.Tests
         public void DefaultRegistryRejectsMutationAfterInitialization()
         {
             Assert.That(
-                () => UnitsRegistry.Default.Register(new Unit(new UnitId("yard"), Dimensions.Length, 0.9144)),
+                () => UnitsRegistry.Default.Register(new Unit(new UnitId("yard"), Dimensions.Length, 0.9144, "")),
                 Throws.InvalidOperationException);
         }
 
@@ -135,7 +135,7 @@ namespace UnitRegistry.Core.Tests
             registry.Freeze();
 
             Assert.That(
-                () => registry.Register(new Unit(new UnitId("yard"), Dimensions.Length, 0.9144)),
+                () => registry.Register(new Unit(new UnitId("yard"), Dimensions.Length, 0.9144, "")),
                 Throws.InvalidOperationException);
         }
 

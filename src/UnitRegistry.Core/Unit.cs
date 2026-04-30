@@ -1,10 +1,12 @@
 using System;
+using System.Diagnostics;
 
 namespace UnitRegistry
 {
     /// <summary>
     /// Represents a specific measurement unit within a single <see cref="Dimension"/>.
     /// </summary>
+    [DebuggerDisplay("{Label} ({Id})")]
     public sealed class Unit : IEquatable<Unit>
     {
         /// <summary>
@@ -124,7 +126,7 @@ namespace UnitRegistry
 
         public override string ToString()
         {
-            return Id.ToString();
+            return Label;
         }
 
         public static bool operator ==(Unit left, Unit right)

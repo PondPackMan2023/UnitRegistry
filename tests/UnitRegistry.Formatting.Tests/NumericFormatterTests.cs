@@ -95,7 +95,7 @@ namespace UnitRegistry.Formatting.Tests
         {
             var formatter = new NumericFormatter("default", UnitsRegistry.Default, "label");
 
-            Assert.That(formatter.ToString(), Is.EqualTo("default"));
+            Assert.That(formatter.ToString(), Is.EqualTo("label"));
         }
 
         // ── Format specifier and provider ───────────────────────────────────────

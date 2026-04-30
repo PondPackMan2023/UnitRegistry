@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 namespace UnitRegistry.Formatting
 {
@@ -10,6 +11,7 @@ namespace UnitRegistry.Formatting
     /// and presentation rules. It serves as the extension point for formatting behavior
     /// while keeping the core unit and dimension semantics in UnitRegistry.Core.
     /// </remarks>
+    [DebuggerDisplay("{Label} ({Id})")]
     public class NumericFormatter
     {
         /// <summary>
@@ -154,7 +156,7 @@ namespace UnitRegistry.Formatting
 
         public override string ToString()
         {
-            return Id.ToString();
+            return Label;
         }
     }
 }

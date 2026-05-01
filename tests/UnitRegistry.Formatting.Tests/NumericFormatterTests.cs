@@ -273,5 +273,71 @@ namespace UnitRegistry.Formatting.Tests
 
             Assert.That(result, Is.EqualTo("1.50"));
         }
+
+        // ── Interpretation symmetry and failure behavior ───────────────────────
+
+        [Test]
+        public void TryInterpretRoundTripsFormattedValue()
+        {
+            var formatter = new NumericFormatter("roundtrip", UnitsRegistry.Default, "label", "G17", CultureInfo.InvariantCulture);
+            double original = 12345.678901234567;
+
+            string text = formatter.Format(original);
+            bool success = formatter.TryInterpret(text, out double interpreted);
+
+            Assert.That(success, Is.True);
+            Assert.That(interpreted, Is.EqualTo(original));
+        }
+
+        [Test]
+        public void TryInterpretWithGermanCultureRoundTripsFormattedValue()
+        {
+            var formatter = new NumericFormatter("german", UnitsRegistry.Default, "label", "F2", new CultureInfo("de-DE"));
+            double original = 1234.5;
+
+            string text = formatter.Format(original);
+            bool success = formatter.TryInterpret(text, out double interpreted);
+
+            Assert.That(text, Is.EqualTo("1234,50"));
+            Assert.That(success, Is.True);
+            Assert.That(interpreted, Is.EqualTo(original).Within(1e-12));
+        }
+
+        [Test]
+        public void TryInterpretReturnsFalseForInvalidInput()
+        {
+            var formatter = new NumericFormatter("invalid", UnitsRegistry.Default, "label", "G", CultureInfo.InvariantCulture);
+
+            bool success = formatter.TryInterpret("not-a-number", out double interpreted);
+
+            Assert.That(success, Is.False);
+            Assert.That(interpreted, Is.EqualTo(0d));
+        }
+
+        [Test]
+        public void TryInterpretReturnsFalseForNullInput()
+        {
+            var formatter = new NumericFormatter("invalid", UnitsRegistry.Default, "label", "G", CultureInfo.InvariantCulture);
+
+            bool success = formatter.TryInterpret(null, out double interpreted);
+
+            Assert.That(success, Is.False);
+            Assert.That(interpreted, Is.EqualTo(0d));
+        }
+
+        [Test]
+        public void TryInterpretIsCultureSensitiveForSameText()
+        {
+            var invariantFormatter = new NumericFormatter("invariant", UnitsRegistry.Default, "label", "F2", CultureInfo.InvariantCulture);
+            var germanFormatter = new NumericFormatter("german", UnitsRegistry.Default, "label", "F2", new CultureInfo("de-DE"));
+
+            bool invariantSuccess = invariantFormatter.TryInterpret("1,50", out double invariantValue);
+            bool germanSuccess = germanFormatter.TryInterpret("1,50", out double germanValue);
+
+            Assert.That(invariantSuccess, Is.True);
+            Assert.That(germanSuccess, Is.True);
+            Assert.That(invariantValue, Is.EqualTo(150d));
+            Assert.That(germanValue, Is.EqualTo(1.5d).Within(1e-12));
+        }
     }
 }

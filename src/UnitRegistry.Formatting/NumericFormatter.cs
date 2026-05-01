@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace UnitRegistry.Formatting
 {
@@ -119,6 +120,31 @@ namespace UnitRegistry.Formatting
         public string Format(double value)
         {
             return value.ToString(FormatSpecifier, FormatProvider);
+        }
+
+        /// <summary>
+        /// Attempts to interpret a fully-formed numeric string using this formatter's culture settings.
+        /// </summary>
+        /// <param name="text">The complete numeric text to interpret.</param>
+        /// <param name="value">When this method returns, contains the interpreted numeric value if successful; otherwise 0.</param>
+        /// <returns><c>true</c> if interpretation succeeds; otherwise <c>false</c>.</returns>
+        /// <remarks>
+        /// This method is intended for symmetric interpretation of strings produced by <see cref="Format(double)"/>
+        /// and <see cref="Format(double, Unit, Unit)"/>.
+        /// </remarks>
+        public bool TryInterpret(string text, out double value)
+        {
+            if (text == null)
+            {
+                value = 0d;
+                return false;
+            }
+
+            return double.TryParse(
+                text,
+                NumberStyles.Float | NumberStyles.AllowThousands,
+                FormatProvider,
+                out value);
         }
 
         /// <summary>

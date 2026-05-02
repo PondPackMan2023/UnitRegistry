@@ -85,14 +85,14 @@ UnitRegistry.Formatting builds on UnitRegistry.Core and is responsible for **pre
 
 It defines:
 
-- **NumericFormatterId**
+- **FormatterId**
   - Explicit identity for formatter configurations
   - Mirrors the UnitId identity pattern
   - Eliminates stringly-typed formatter selection
 
 - **NumericFormatter**
   - Object-based formatting policy
-  - Owns a NumericFormatterId
+  - Owns a FormatterId
   - Depends explicitly on a UnitRegistry
   - Formats numeric values expressed in a Unit into strings
   - Supports:
@@ -118,7 +118,7 @@ This design intentionally separates **what values mean** from **how they are dis
 Key principles driving this decision:
 
 - **Explicit identity over primitives**  
-  Introduce UnitId and NumericFormatterId to eliminate error-prone string usage and improve API discoverability.
+  Introduce UnitId and FormatterId to eliminate error-prone string usage and improve API discoverability.
 
 - **Single responsibility per layer**  
   Semantics (Core) and presentation (Formatting) evolve independently.

@@ -86,7 +86,7 @@ It provides:
 
 It provides:
 
-- **NumericFormatterId**
+- **FormatterId**
   - Explicit identity for formatter configurations
   - Mirrors the `UnitId` identity model
 

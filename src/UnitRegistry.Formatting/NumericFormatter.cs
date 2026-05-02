@@ -18,7 +18,7 @@ namespace UnitRegistry.Formatting
         /// <summary>
         /// Gets the stable identity of this formatter.
         /// </summary>
-        public NumericFormatterId Id { get; }
+        public FormatterId Id { get; }
 
         /// <summary>
         /// Gets the unit registry used for unit lookups and conversion.
@@ -56,7 +56,7 @@ namespace UnitRegistry.Formatting
         /// <param name="formatSpecifier">Numeric format specifier (e.g., "F2", "E3", "G"). Defaults to "G".</param>
         /// <param name="formatProvider">Format provider for culture-specific formatting. If null, uses current culture.</param>
         public NumericFormatter(
-            NumericFormatterId id,
+            FormatterId id,
             UnitsRegistry unitRegistry,
             string label,
             string formatSpecifier = "G",
@@ -108,7 +108,7 @@ namespace UnitRegistry.Formatting
             string label,
             string formatSpecifier = "G",
             IFormatProvider formatProvider = null)
-            : this(new NumericFormatterId(id), unitRegistry, label, formatSpecifier, formatProvider)
+            : this(new FormatterId(id), unitRegistry, label, formatSpecifier, formatProvider)
         {
         }
 

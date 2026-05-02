@@ -5,7 +5,7 @@ namespace UnitRegistry.Formatting
     /// <summary>
     /// Represents the stable identity of a numeric formatter.
     /// </summary>
-    public sealed class NumericFormatterId : IEquatable<NumericFormatterId>
+    public sealed class FormatterId : IEquatable<FormatterId>
     {
         /// <summary>
         /// Gets the normalized identity value.
@@ -13,10 +13,10 @@ namespace UnitRegistry.Formatting
         public string Value { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NumericFormatterId"/> class.
+        /// Initializes a new instance of the <see cref="FormatterId"/> class.
         /// </summary>
         /// <param name="value">Stable identity value for the formatter.</param>
-        public NumericFormatterId(string value)
+        public FormatterId(string value)
         {
             if (value == null)
             {
@@ -32,7 +32,7 @@ namespace UnitRegistry.Formatting
             Value = normalizedValue;
         }
 
-        public bool Equals(NumericFormatterId other)
+        public bool Equals(FormatterId other)
         {
             if (ReferenceEquals(null, other))
             {
@@ -49,7 +49,7 @@ namespace UnitRegistry.Formatting
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as NumericFormatterId);
+            return Equals(obj as FormatterId);
         }
 
         public override int GetHashCode()
@@ -62,12 +62,12 @@ namespace UnitRegistry.Formatting
             return Value;
         }
 
-        public static bool operator ==(NumericFormatterId left, NumericFormatterId right)
+        public static bool operator ==(FormatterId left, FormatterId right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(NumericFormatterId left, NumericFormatterId right)
+        public static bool operator !=(FormatterId left, FormatterId right)
         {
             return !Equals(left, right);
         }

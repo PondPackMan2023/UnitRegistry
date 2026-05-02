@@ -12,7 +12,7 @@ namespace UnitRegistry.Formatting.Tests
         [Test]
         public void FormatterOwnsBothIdAndRegistry()
         {
-            var id = new NumericFormatterId("default");
+            var id = new FormatterId("default");
             var registry = UnitsRegistry.Default;
 
             var formatter = new NumericFormatter(id, registry, "default label");
@@ -29,14 +29,14 @@ namespace UnitRegistry.Formatting.Tests
 
             var formatter = new NumericFormatter("default", registry, "label");
 
-            Assert.That(formatter.Id, Is.EqualTo(new NumericFormatterId("default")));
+            Assert.That(formatter.Id, Is.EqualTo(new FormatterId("default")));
             Assert.That(formatter.UnitRegistry, Is.SameAs(registry));
         }
 
         [Test]
         public void FormatterIdentityIsDiscoverable()
         {
-            var id = new NumericFormatterId("compact");
+            var id = new FormatterId("compact");
             var formatter = new NumericFormatter(id, UnitsRegistry.Default, "label");
 
             Assert.That(formatter.Id.Value, Is.EqualTo("compact"));
@@ -46,7 +46,7 @@ namespace UnitRegistry.Formatting.Tests
         public void NullIdThrows()
         {
             Assert.That(
-                () => new NumericFormatter((NumericFormatterId)null, UnitsRegistry.Default, "label"),
+                () => new NumericFormatter((FormatterId)null, UnitsRegistry.Default, "label"),
                 Throws.ArgumentNullException);
         }
 
@@ -54,7 +54,7 @@ namespace UnitRegistry.Formatting.Tests
         public void NullRegistryThrows()
         {
             Assert.That(
-                () => new NumericFormatter(new NumericFormatterId("default"), null, "label"),
+                () => new NumericFormatter(new FormatterId("default"), null, "label"),
                 Throws.ArgumentNullException);
         }
 

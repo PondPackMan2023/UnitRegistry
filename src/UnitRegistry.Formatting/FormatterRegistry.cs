@@ -8,8 +8,8 @@ namespace UnitRegistry.Formatting
     /// </summary>
     public sealed class FormatterRegistry
     {
-        private readonly Dictionary<NumericFormatterId, NumericFormatter> _formatters =
-            new Dictionary<NumericFormatterId, NumericFormatter>();
+        private readonly Dictionary<FormatterId, NumericFormatter> _formatters =
+            new Dictionary<FormatterId, NumericFormatter>();
 
         /// <summary>
         /// Registers a formatter by its identifier.
@@ -39,7 +39,7 @@ namespace UnitRegistry.Formatting
         /// <param name="id">Formatter identifier.</param>
         /// <returns>The formatter if found; otherwise null.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="id"/> is null.</exception>
-        public NumericFormatter Get(NumericFormatterId id)
+        public NumericFormatter Get(FormatterId id)
         {
             if (id == null)
             {
@@ -59,7 +59,7 @@ namespace UnitRegistry.Formatting
         /// <param name="formatSpecifier">New numeric format specifier.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="id"/> is null.</exception>
         /// <exception cref="InvalidOperationException">Thrown when the formatter identifier is not registered.</exception>
-        public void ChangeFormat(NumericFormatterId id, string formatSpecifier)
+        public void ChangeFormat(FormatterId id, string formatSpecifier)
         {
             if (id == null)
             {

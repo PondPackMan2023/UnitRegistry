@@ -13,12 +13,20 @@ namespace UnitRegistry.Formatting
     /// while keeping the core unit and dimension semantics in UnitRegistry.Core.
     /// </remarks>
     [DebuggerDisplay("{Label} ({Id})")]
-    public class NumericFormatter
+    public class NumericFormatter : IValueFormatter
     {
         /// <summary>
         /// Gets the stable identity of this formatter.
         /// </summary>
-        public NumericFormatterId Id { get; }
+        public FormatterId Id { get; }
+
+        /// <summary>
+        /// Gets the supported value type.
+        /// </summary>
+        public Type ValueType
+        {
+            get { return typeof(double); }
+        }
 
         /// <summary>
         /// Gets the unit registry used for unit lookups and conversion.
@@ -56,7 +64,7 @@ namespace UnitRegistry.Formatting
         /// <param name="formatSpecifier">Numeric format specifier (e.g., "F2", "E3", "G"). Defaults to "G".</param>
         /// <param name="formatProvider">Format provider for culture-specific formatting. If null, uses current culture.</param>
         public NumericFormatter(
-            NumericFormatterId id,
+            FormatterId id,
             UnitsRegistry unitRegistry,
             string label,
             string formatSpecifier = "G",
@@ -108,7 +116,7 @@ namespace UnitRegistry.Formatting
             string label,
             string formatSpecifier = "G",
             IFormatProvider formatProvider = null)
-            : this(new NumericFormatterId(id), unitRegistry, label, formatSpecifier, formatProvider)
+            : this(new FormatterId(id), unitRegistry, label, formatSpecifier, formatProvider)
         {
         }
 
@@ -120,6 +128,23 @@ namespace UnitRegistry.Formatting
         public string Format(double value)
         {
             return value.ToString(FormatSpecifier, FormatProvider);
+        }
+
+        /// <summary>
+        /// Formats an object value as a numeric value.
+        /// </summary>
+        /// <param name="value">Value to format.</param>
+        /// <param name="formatProvider">Optional format provider override.</param>
+        /// <returns>A formatted string representation of the value.</returns>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="value"/> is not a double.</exception>
+        public string Format(object value, IFormatProvider formatProvider = null)
+        {
+            if (!(value is double))
+            {
+                throw new ArgumentException("Value must be of type double.", nameof(value));
+            }
+
+            return Format((double)value);
         }
 
         /// <summary>

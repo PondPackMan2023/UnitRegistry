@@ -23,7 +23,7 @@ namespace UnitRegistry.Formatting.Tests
         {
             var registry = new FormatterRegistry();
 
-            NumericFormatter formatter = registry.Get(new NumericFormatterId("missing"));
+            NumericFormatter formatter = registry.Get(new FormatterId("missing"));
 
             Assert.That(formatter, Is.Null);
         }
@@ -34,7 +34,7 @@ namespace UnitRegistry.Formatting.Tests
             var registry = new FormatterRegistry();
 
             Assert.That(
-                () => registry.ChangeFormat(new NumericFormatterId("missing"), "F3"),
+                () => registry.ChangeFormat(new FormatterId("missing"), "F3"),
                 Throws.InvalidOperationException);
         }
 
@@ -42,7 +42,7 @@ namespace UnitRegistry.Formatting.Tests
         public void ChangeFormatReplacesFormatterInstanceAndPreservesImmutableOriginal()
         {
             var registry = new FormatterRegistry();
-            var id = new NumericFormatterId("default");
+            var id = new FormatterId("default");
             var original = new NumericFormatter(id, UnitsRegistry.Default, "default label", "F2");
 
             registry.Register(original);

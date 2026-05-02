@@ -10,7 +10,7 @@ namespace UnitRegistry.Formatting
         /// <summary>
         /// Gets the formatter identity.
         /// </summary>
-        FormatterId FormatterId { get; }
+        FormatterId Id { get; }
 
         /// <summary>
         /// Gets the supported input value type.

@@ -6,7 +6,7 @@ namespace UnitRegistry.Formatting
     /// <summary>
     /// Formats DateTime values according to a fixed formatting intent.
     /// </summary>
-    public sealed class DateTimeFormatter : IValueFormatter
+    public sealed class DateTimeFormatter : IValueFormatter, IValueParser
     {
         /// <summary>
         /// Gets the stable identity of this formatter.
@@ -92,6 +92,34 @@ namespace UnitRegistry.Formatting
             }
 
             return Format((DateTime)value, formatProvider);
+        }
+
+        /// <summary>
+        /// Attempts to parse text as a DateTime value.
+        /// </summary>
+        /// <param name="text">Input text to parse.</param>
+        /// <param name="formatProvider">Optional format provider override.</param>
+        /// <param name="value">When successful, receives the parsed DateTime.</param>
+        /// <returns><c>true</c> when parsing succeeds; otherwise <c>false</c>.</returns>
+        public bool TryParse(string text, IFormatProvider formatProvider, out object value)
+        {
+            value = null;
+
+            if (text == null)
+            {
+                return false;
+            }
+
+            IFormatProvider provider = formatProvider ?? FormatProvider ?? CultureInfo.CurrentCulture;
+            DateTime parsed;
+            bool success = DateTime.TryParse(text, provider, DateTimeStyles.None, out parsed);
+            if (!success)
+            {
+                return false;
+            }
+
+            value = parsed;
+            return true;
         }
     }
 }

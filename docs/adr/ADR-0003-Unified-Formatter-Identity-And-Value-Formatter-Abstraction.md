@@ -38,7 +38,7 @@ public interface IValueFormatter
 {
     FormatterId FormatterId { get; }
     Type ValueType { get; }
-    string Format(object value, IFormatProvider? formatProvider = null);
+    string Format(object value, IFormatProvider formatProvider = null);
 }
 ```
 

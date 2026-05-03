@@ -13,7 +13,7 @@ namespace UnitRegistry.Formatting
     /// while keeping the core unit and dimension semantics in UnitRegistry.Core.
     /// </remarks>
     [DebuggerDisplay("{Label} ({Id})")]
-    public class NumericFormatter : IValueFormatter
+    public class NumericFormatter : IValueFormatter, ILabel
     {
         /// <summary>
         /// Gets the stable identity of this formatter.

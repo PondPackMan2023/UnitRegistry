@@ -7,7 +7,7 @@ namespace UnitRegistry
     /// Represents a specific measurement unit within a single <see cref="Dimension"/>.
     /// </summary>
     [DebuggerDisplay("{Label} ({Id})")]
-    public sealed class Unit : IEquatable<Unit>
+    public sealed class Unit : IEquatable<Unit>, ILabel
     {
         /// <summary>
         /// Gets the stable identity of this unit.
